@@ -1,0 +1,212 @@
+node
+{
+	ws('/opt/SonarQubeTest/Result/Hybris-Build-Branch_Dev_NIGHTLY/')
+	//Nightly Parallel Stage
+	
+	//This is a pipeline for Sonar
+	parallel(
+		"ecicore" :
+		{
+			stage('ecicore')
+			{
+				dir('hybris/bin/platform')
+				{
+					withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+					{
+						echo "Workspace dir is ${pwd()}"
+						sh "ls -la ${pwd()}"
+						sh 'ant -file build.xml "-Dsonar.projectName=Hybris - ecicore_RUDY" -Dsonar.projectKey=ecicore_RUDY -Dsonar.tests=eci/ecicore/testsrc/com -Dsonar.sources=eci/ecicore/src/com -Dsonar.extension=efoodstorefront -Dsonar.working.directory=.sonarecicore -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+					}
+				}
+			}
+		},
+		"ecicockpits" :
+		{
+			stage('ecicockpits')
+			{
+				dir('hybris/bin/platform')
+				{
+					withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+					{
+						sh 'ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dsonar.projectName=Hybris - ecicockpits_RUDY" -Dsonar.projectKey=ecicockpits_RUDY -Dsonar.tests=eci/ecicockpits/testsrc/com -Dsonar.sources=eci/ecicockpits/src/com -Dsonar.extension=ecicockpits -Dsonar.working.directory=.sonarecicockpits -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+					}
+				}
+			}
+		},
+		"ecisapartmasimport" :
+		{
+			stage('ecisapartmasimport')
+			{
+				dir('hybris/bin/platform')
+				{
+					withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+					{
+						sh 'ant -file build.xml "-Dsonar.projectName=Hybris - ecisapartmasimport_RUDY" -Dsonar.projectKey=ecisapartmasimport_RUDY -Dsonar.tests=eci/ecisapartmasimport/testsrc/com -Dsonar.sources=eci/ecisapartmasimport/src/com -Dsonar.extension=ecisapartmasimport -Dsonar.working.directory=.sonarecisapartmasimport -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+					}
+				}
+			}
+		},
+		"cachefilter" :
+		{
+			stage('cachefilter')
+			{
+				dir('hybris/bin/platform')
+				{
+					withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+					{
+						sh 'ant -file build.xml "-Dsonar.projectName=Hybris - cachefilter_RUDY" -Dsonar.projectKey=cachefilter_RUDY -Dsonar.tests=eci/cachefilter/testsrc/com -Dsonar.sources=eci/cachefilter/src/com -Dsonar.extension=cachefilter -Dsonar.working.directory=.sonarcachefilter -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+					}
+				}
+			}
+		},
+	
+	//"Sonar Pipeline Parallel Stage Part 2"
+		"cachefilterbackoffice" :
+		{
+			stage('cachefilterbackoffice')
+			{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - cachefilterbackoffice_RUDY" -Dsonar.projectKey=cachefilterbackoffice_RUDY -Dsonar.tests=eci/cachefilterbackoffice/testsrc/com -Dsonar.sources=eci/cachefilterbackoffice/src/com -Dsonar.extension=cachefilterbackoffice -Dsonar.working.directory=.sonarcachefilterbackoffice -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"eciaddressdoctor" :
+	{
+		stage('eciaddressdoctor')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - eciaddressdoctor_RUDY" -Dsonar.projectKey=eciaddressdoctor_RUDY -Dsonar.tests=eci/eciaddressdoctor/testsrc/com -Dsonar.sources=eci/eciaddressdoctor/src/com -Dsonar.extension=eciaddressdoctor -Dsonar.working.directory=.sonareciaddressdoctor -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"ecifacades" :
+	{
+		stage('ecifacades')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - ecifacades_RUDY" -Dsonar.projectKey=ecifacades_RUDY -Dsonar.tests=eci/ecifacades/testsrc/com -Dsonar.sources=eci/ecifacades/src/com -Dsonar.extension=ecifacades -Dsonar.working.directory=.sonarecifacades -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"ecifulfilmentprocess" :
+	{
+		stage('ecifulfilmentprocess')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - ecifulfilmentprocess_RUDY" -Dsonar.projectKey=ecifulfilmentprocess_RUDY -Dsonar.tests=eci/ecifulfilmentprocess/testsrc/com -Dsonar.sources=eci/ecifulfilmentprocess/src/com -Dsonar.extension=ecifulfilmentprocess -Dsonar.working.directory=.sonarecifulfilmentprocess -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	//"Sonar Pipeline Parallel Stage Part 3"
+	"ecipaypalrest" :
+	{
+		stage('ecipaypalrest')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - ecipaypalrest_RUDY" -Dsonar.projectKey=ecipaypalrest_RUDY -Dsonar.tests=eci/ecipaypalrest/testsrc/com -Dsonar.sources=eci/ecipaypalrest/src/com -Dsonar.extension=ecipaypalrest -Dsonar.working.directory=.sonarecipaypalrest -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"ecistorefrontcommons" :
+	{
+		stage('ecistorefrontcommons')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - ecistorefrontcommons_RUDY" -Dsonar.projectKey=ecistorefrontcommons_RUDY -Dsonar.sources=eci/ecistorefrontcommons/web/src/com -Dsonar.extension=ecistorefrontcommons -Dsonar.working.directory=.sonarecistorefrontcommons -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"factfindersearch" :
+	{
+		stage('factfindersearch')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - factfindersearch_RUDY" -Dsonar.projectKey=factfindersearch_RUDY -Dsonar.tests=eci/factfindersearch/testsrc -Dsonar.sources=eci/factfindersearch/src -Dsonar.extension=factfindersearch -Dsonar.working.directory=.sonarfactfindersearch -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	//"Sonar Pipeline Parallel Stage Part 4"
+	"paymentfacades" :
+	{
+		stage('paymentfacades')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - paymentfacades_RUDY" -Dsonar.projectKey=paymentfacades_RUDY -Dsonar.tests=eci/paymentfacades/testsrc "-Dsonar.sources=eci/paymentfacades/src,eci/paymentfacades/web" -Dsonar.extension=paymentfacades -Dsonar.working.directory=.sonarpaymentfacades -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"wirecard" :
+	{
+		stage('wirecard')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - wirecard_RUDY" -Dsonar.projectKey=wirecard_RUDY -Dsonar.tests=eci/wirecard/testsrc "-Dsonar.sources=eci/wirecard/src,eci/wirecard/web" -Dsonar.extension=wirecard -Dsonar.working.directory=.sonarwirecard -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	},
+	"efoodstorefront" :
+	{
+		stage('efoodstorefront')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh 'ant -file build.xml "-Dsonar.projectName=Hybris - efoodstorefront_RUDY" -Dsonar.projectKey=efoodstorefront_RUDY -Dsonar.tests=eci/efoodstorefront/web/testsrc/com -Dsonar.sources=eci/efoodstorefront/web/src/com -Dsonar.extension=efoodstorefront -Dsonar.working.directory=.sonarefoodstorefront -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	}
+	/*
+	"ecistorefront" :
+	{
+		stage('ecistorefront')
+		{
+			dir('hybris/bin/platform')
+			{
+				withCredentials([usernamePassword(credentialsId: 'sonarUser', passwordVariable: 'rudySonarPassword', usernameVariable: 'rudySonarUser')])
+				{
+					sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dsonar.projectName=Hybris - ecistorefront_RUDY" -Dsonar.projectKey=ecistorefront_RUDY -Dsonar.tests=eci/ecistorefront/web/testsrc/com -Dsonar.sources=eci/ecistorefront/web/src/com -Dsonar.extension=ecistorefront -Dsonar.working.directory=.sonarecistorefront -Dsonar.projectVersion=${SonarBuildVersion} -Dsonar.login=${rudySonarUser} -Dsonar.password=${rudySonarPassword} -Dsonar.junit.reportPaths=${SonarJunitReportPaths} -Dsonar.jacoco.reportPaths=${SonarJacocoReportPaths} -Dsonar.host.url=${SonarHostUrl} -Dsonar.java.coveragePlugin=${SonarCoveragePlugin} -Dsonar.dynamicAnalysis=${SonarDynamicAnalysis} sonarsingle'
+				}
+			}
+		}
+	}
+	*/
+	)
+}

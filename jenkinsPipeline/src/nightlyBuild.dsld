@@ -1,0 +1,55 @@
+// this is a DSLD file
+// start off creating a custom DSL Descriptor for your Groovy DSL
+
+// The following snippet adds the 'newProp' to all types that are a subtype of GroovyObjects
+// contribute(currentType(subType('groovy.lang.GroovyObject'))) {
+//   property name : 'newProp', type : String, provider : 'Sample DSL', doc : 'This is a sample.  You should see this in content assist for GroovyObjects: <pre>newProp</pre>'
+// }
+
+node('hybris_slave') {
+	sh 'export ANT_OPTS="-Xmx5G -XX:MaxPermSize=512m"'
+	stage('git branch') {
+		git branch: 'develop', credentialsId: '8d5e61e0-5e63-4898-8782-9d94aa6478b1', url: 'ssh://git@www.secrz.de:7999/hyb/hybris-master.git'
+	}
+	stage ('hybris build') {
+		dir('jenkins') {
+			sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dbuild.nodename=$JOB_NAME" -Dbuild.number=$BUILD_NUMBER -Dbuild.tag=$BUILD_TAG -Dbld.giturl=$GIT_URL -Dbuild.gitbranch=$GIT_BRANCH -Dbuild.date=$BUILD_DATE -Dbuild.jobname=$JOB_NAME eci-build'
+			sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dbuild.nodename=$JOB_NAME" -Dbuild.number=$BUILD_NUMBER -Dbuild.tag=$BUILD_TAG -Dbld.giturl=$GIT_URL -Dbuild.gitbranch=$GIT_BRANCH -Dbuild.date=$BUILD_DATE -Dbuild.jobname=$JOB_NAME install-db-driver'
+		}
+	}
+	parallel(
+		"eciCoverage" : {
+			stage('eciCoverage') {
+				dir('jenkins') {
+					sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dbuild.nodename=$JOB_NAME" -Dbuild.number=$BUILD_NUMBER -Dbuild.tag=$BUILD_TAG -Dbld.giturl=$GIT_URL -Dbuild.gitbranch=$GIT_BRANCH -Dbuild.date=$BUILD_DATE -Dbuild.jobname=$JOB_NAME eciCoverage'
+				}
+			}
+		},
+		"eciRunJunit" : {
+			stage('eciRunJunit') {
+				dir('jenkins') {
+					sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dbuild.nodename=$JOB_NAME" -Dbuild.number=$BUILD_NUMBER -Dbuild.tag=$BUILD_TAG -Dbld.giturl=$GIT_URL -Dbuild.gitbranch=$GIT_BRANCH -Dbuild.date=$BUILD_DATE -Dbuild.jobname=$JOB_NAME eciRunJunit'
+				}
+				
+			}
+		},
+//		"eciRunIntegration" : {
+//			stage('eciRunIntegration') {
+//				dir('jenkins') {
+//					sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dbuild.nodename=$JOB_NAME" -Dbuild.number=$BUILD_NUMBER -Dbuild.tag=$BUILD_TAG -Dbld.giturl=$GIT_URL -Dbuild.gitbranch=$GIT_BRANCH -Dbuild.date=$BUILD_DATE -Dbuild.jobname=$JOB_NAME eciCoverage eciRunIntegration'
+//				}
+//			}
+//		},
+		"dependency-check" : {
+			stage('dependency-check') {
+				dir('jenkins') {
+					sh '/var/lib/jenkins/ant/apache-ant-1.9.1/bin/ant -file build.xml "-Dbuild.nodename=$JOB_NAME" -Dbuild.number=$BUILD_NUMBER -Dbuild.tag=$BUILD_TAG -Dbld.giturl=$GIT_URL -Dbuild.gitbranch=$GIT_BRANCH -Dbuild.date=$BUILD_DATE -Dbuild.jobname=$JOB_NAME dependency-check'
+				}
+			}
+		}
+	)
+	jacoco inclusionPattern: '**/com/lidl/eci/hybris/**/*class', sourcePattern: '**/src'
+	junit 'hybris/log/junit/TEST-*.xml'
+//	emailext attachmentsPattern: 'jenkins/dependency-check/report/**/*', body: 'See attached.', subject: 'Hybris Develop OWASP Report', to: 'Alexander.Popow@lild.com'
+//	cleanWs()
+}

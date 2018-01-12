@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Plugin-Dependencies: META-INF/lib/sslr-core-1.20.jar META-INF/lib/comm
+ ons-lang-2.6.jar META-INF/lib/commons-io-2.5.jar META-INF/lib/guava-1
+ 0.0.1.jar META-INF/lib/jsr305-1.3.9.jar META-INF/lib/sslr-squid-bridg
+ e-2.6.1.jar META-INF/lib/jaxen-1.1.4.jar META-INF/lib/checkstyle-all-
+ 3.7-shaded.jar META-INF/lib/sslr-xpath-1.20.jar META-INF/lib/slf4j-ap
+ i-1.5.6.jar META-INF/lib/jcl-over-slf4j-1.5.6.jar META-INF/lib/picoco
+ ntainer-2.14.1.jar
+Plugin-Description: Analyze Java code with <a href="http://checkstyle.
+ sourceforge.net/">Checkstyle</a>.
+Plugin-SourcesUrl: https://github.com/checkstyle/sonar-checkstyle/chec
+ kstyle-sonar-plugin
+Plugin-BuildDate: 2017-05-06T11:59:24-0700
+Archiver-Version: Plexus Archiver
+SonarLint-Supported: false
+Built-By: rivanov
+Plugin-License: LGPL-3.0
+Plugin-Version: 3.7
+Plugin-Organization: Checkstyle
+Sonar-Version: 5.6.6
+Plugin-Developers: Roman Ivanov,Richard Veach,Evgeny Mandrikov,Michael
+  Gumowski,Nicolas Peru
+Plugin-IssueTrackerUrl: https://github.com/checkstyle/sonar-checkstyle
+ /issues
+Plugin-ChildFirstClassLoader: false
+Implementation-Build: 
+Plugin-OrganizationUrl: http://checkstyle.sourceforge.net
+Build-Time: 
+Plugin-Key: checkstyle
+Plugin-Class: org.sonar.plugins.checkstyle.CheckstylePlugin
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_121
+Plugin-Name: Checkstyle
+
